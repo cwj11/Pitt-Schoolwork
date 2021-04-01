@@ -1,0 +1,270 @@
+---
+title: "Homework 4"
+author: "Connor Johnson"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+  word_document: default
+---
+
+```{r packages}
+library(ISLR)
+library(dplyr)
+library(MASS)
+library(class)
+library(bootstrap)
+library(boot)
+library(broom)
+library(coin)
+library(rcompanion)
+```
+
+## Problem 2
+
+We can use the bootstrap approach to approximate the standard deviation. The bootstrap method works by re-sampling the observations from our data a large number of times. We can then use these samples to create a distribution of estimates for our prediction. Finding the standard deviation of this distribution will be an estimate for the standard deviation of out prediction.
+
+
+
+## Problem 3
+
+```{r 3a}
+library(bootstrap)
+data(law)
+plot(law)
+cor(law)
+```
+
+There does appear to be a strong positive linear relationship between LSAT score and GPA. The correlation between them is 0.7764
+
+```{r 3b}
+
+
+nBoot <- 1000
+data(law)
+mean.boot <- rep(0,nBoot)
+cor.boot = numeric(nBoot)
+for (i in 1:nBoot) {
+	xperm1 <- sample(1:nrow(law), size = nrow(law), replace=T)
+	cor.boot[i] = cor(law[xperm1,1],law[xperm1,2])
+}
+hist(cor.boot, breaks=20)
+set.seed(5)
+
+cor0 = cor(law$LSAT,law$GPA)
+abline(v=cor0, col="red", lwd=2)
+
+```
+
+
+
+```{r 3cd}
+set.seed(22)
+boot_corr <- function(data, resample_vector) {
+    cor(data$x[resample_vector], data$y[resample_vector])
+}
+ds <- data.frame(y = law$LSAT, x = law$GPA)
+boots <- boot(ds, boot_corr, R = 1000)
+boot.ci(boots)
+
+hist(cor.boot, breaks=20)
+print("Bias = -0.004255571")
+abline(v=cor0, col="red", lwd=2)
+abline(v=0.4490, col="blue", lwd=2)
+abline(v=0.9635, col="blue", lwd=2)
+abline(v=0.2958, col="green", lwd=2)
+abline(v=0.9383, col="green", lwd=2)
+```
+
+(c)
+
+Based on the confidence interval, we can't reject the null hypothesis that the correlation is equal to 0.5 because 0.5 is within the confidence interval
+
+(d)
+
+Based on the bias corrected confidence interval, we cannot reject the null hypothesis that correlation is equal to 0.5 because 0.t is within the confidence interval.
+
+(e)
+
+```{r 3e}
+nperm <- 1000
+law.perm <- numeric(nperm)
+for (i in 1:nperm) {
+  ind <- sample(nrow(law), replace = TRUE)
+  law.perm[i] <- cor(law[ind, "LSAT"], law[ind, "GPA"])
+}
+mean(law.perm)
+hist(law.perm, freq = FALSE,breaks = 20)
+abline(v=cor(law$LSAT,law$GPA),col='red',lwd=2)
+law.perm = sort(law.perm)
+print(paste0("95% Confidence Interval: (",law.perm[25],", ",law.perm[975],")"))
+```
+
+The confidence interval does not contain zero so we reject the null hypothesis that correlation is equal to zero.
+
+
+
+## Problem 4
+
+(a)
+```{r 4a}
+X1 = runif(50)
+X2 = runif(50)
+epsilon = rnorm(50, 0, 0.25)
+Y = X1 + X2 + epsilon
+```
+
+(b)
+```{r 4b}
+#set.seed(1)
+X1 = runif(50)
+X2 = runif(50)
+epsilon = rnorm(50, 0, 0.25)
+Y = X1 + X2 + epsilon
+reg = lm(Y~X1+X2)
+X1_test = runif(30)
+X2_test = runif(30)
+epsilon_test = rnorm(30, 0, 0.25)
+Y_test = X1_test + X2_test + epsilon_test
+
+summary(reg)
+test = data.frame(X1_test,X2_test)
+colnames(test) <- c("X1", "X2")
+pred = predict(reg, test)
+MSE0 = mean((pred-Y_test)^2)
+```
+
+
+
+(c)
+```{r 4c}
+perms = 1000
+MSE = numeric(perms)
+for(i in 1:perms){
+  test$X1 = sample(test$X1)
+  test$X2 = sample(test$X2)
+  pred = predict(reg, test)
+  MSE[i] = mean((pred-Y_test)^2)
+  
+}
+hist(MSE, xlim=c(0,0.6))
+abline(v=MSE0, col="blue")
+print(length(MSE[MSE < MSE0])/perms)
+```
+
+We can reject the null hypothesis that $\beta_{1} = 0$ and $\beta_{2} = 0$ because the p-value is less than 0.05
+
+
+(d)
+```{r 4d}
+perms = 1000
+MSE = numeric(perms)
+for(i in 1:perms){
+  test$X2 = sample(test$X2)
+  pred = predict(reg, test)
+  MSE[i] = mean((pred-Y_test)^2)
+  
+}
+hist(MSE, xlim=c(0,0.5))
+abline(v=MSE0, col="blue")
+print(length(MSE[MSE < MSE0])/perms)
+```
+
+We can reject the null hypothesis that $\beta_{1} = 0$ because the p-value is less than 0.05
+
+(e)
+```{r 4e}
+m <- matrix(runif(5000), ncol=10, nrow = 500)
+Xs = data.frame(m)
+colnames(Xs) <- c("X1","X2","X3","X4","X5","X6","X7","X8","X9","X10")
+epsilon_2 = rnorm(500, 0, 0.25)
+Y = Xs$X1+Xs$X2+Xs$X3+Xs$X4+Xs$X5+Xs$X6+Xs$X7+Xs$X8+Xs$X9+Xs$X10+epsilon_2
+
+m <- matrix(runif(500), ncol=10, nrow = 50)
+Xs_test = data.frame(m)
+colnames(Xs) <- c("X1","X2","X3","X4","X5","X6","X7","X8","X9","X10")
+epsilon_2_test = rnorm(50, 0, 0.25)
+
+Y_test = Xs_test$X1+Xs_test$X2+Xs_test$X3+Xs_test$X4+Xs_test$X5+Xs_test$X6+Xs_test$X7+Xs_test$X8+Xs_test$X9+
+  Xs_test$X10+epsilon_2_test
+
+reg = lm(Y~X1+X2+X3+X4+X5+X6+X7+X8+X9+X10,data=Xs)
+
+pred = predict(reg, Xs_test)
+MSE0 = mean((pred-Y_test)^2)
+```
+
+
+```{r 4f}
+X = c(Xs_test$X8, Xs_test$X9, Xs_test$X10)
+perms = 1000
+MSE = numeric(perms)
+for(i in 1:perms){
+  X <- sample(X)
+  Xs_test$X8 = sample(Xs_test$X8)
+  Xs_test$X9 = sample(Xs_test$X9)
+  Xs_test$X10 = sample(Xs_test$X10)
+  pred = predict(reg, Xs_test)
+  MSE[i] = mean((pred-Y_test)^2)
+  
+}
+hist(MSE, xlim=c(0,0.8))
+abline(v=MSE0, col="blue")
+print(length(MSE[MSE < MSE0])/perms)
+```
+
+We can reject the null hypothesis that $\beta_{8} = 0$,  $\beta_{9} = 0$, and $\beta_{10} = 0$ because the p-value is less than 0.05
+
+## Problem 5
+
+(a)
+
+We would perform a z-test on the two proportions of the group with hypotheses below
+
+$$H_{0}: p_{1}=p_{2}$$ $$H_{a}: p_{1} \neq p_{2}$$ 
+$p_{1}$ is the placebo group and $p_{2}$ is the vaccinated group.
+The z-stat formula is
+$$Z=\frac{p_{1}-p_{2}}{\sqrt{\frac{p q}{n_{1}} + \frac{p q}{n_{2}}}}$$
+Plugging in our values, we get $Z=11.8347$ with $p \approx 0$. So, we can reject the null hypothesis which shows that the vaccine is effective.
+
+(b)
+
+We would expect that the number of positive cases in each group would be similar to each other.
+
+(c)
+
+We can use the difference in proportion between the two groups as our test statistic.
+
+
+```{r 5d}
+
+vaccine = numeric(21500)
+placebo = numeric(21500)
+for (i in 1:8){
+  vaccine[i] = 1
+}
+for (i in 1:162){
+  placebo[i] = 1
+}
+t_star = mean(placebo)-mean(vaccine)
+perms = 1000
+t = numeric(perms)
+for(i in 1:1000){
+  X = numeric(43000)
+  idx = sample(1:length(X), 170, replace=FALSE)
+  X[idx] = 1
+  vaccine = X[1:21500]
+  placebo = X[21501:43000]
+  t[i] = mean(placebo) - mean(vaccine)
+}
+hist(t, xlim=c(-0.002, 0.008))
+abline(v=t_star, col="blue")
+print(length(t[t_star<t])/perms)
+```
+
+None of the test values are less than the original statistic so we know that the p-value is <0.001.
+
+
+
+
+

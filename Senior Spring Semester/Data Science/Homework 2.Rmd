@@ -1,0 +1,376 @@
+---
+title: "Homework 2"
+author: "Connor Johnson"
+output: html_document
+---
+
+
+
+```{r packages}
+library(ISLR)
+library(ggplot2)
+library(dplyr)
+library(reshape2)
+set.seed(1)
+```
+
+## Problem 2
+
+## Exercise 3
+
+(a) iii. is correct. Beta 3 adds 35k to the predicited salary if the person is a woman. However, beta 5 is an interaction term that lowers the predicted salary based on GPA only if the person is a woman. So, if a persons GPA is higher than 3.5, men make more than women on average.
+
+(b) Y = 50 + 20(4.0) + 0.07(110) + 35(1) + 0.01(4.0x110) - 10(4.0) = $137100
+
+(c) False. There is not enough information to determine this. It is possible that the interaction is still statistically significant even though it is small. Since no information is given on the p-value of the terms in the regression, the significance of the terms can't be found.
+
+## Exercise 4
+
+(a) We would expect the cubic regression to have a lower residual sum of squares because it will have a tighter fit on the training data.
+
+(b) We expect the linear regression to have a lower residual sum of squares on the test set because the true relationship is linear. This means the cubic regression would be overfit causing more error on the test set.
+
+(c) The cubic regression would have a lower residual sum of squares on the training set. Regardless of the true relationship, a more flexible model will always have lower error on the training set.
+
+(d) There is no way to tell which regression would have a lower RSS. The only information given on the true relationship of the model, only that it is not linear. Which model has a lower RSS on the test set depends on which one is closer to the true relationship. Since the true relationship is unknown, there is no way to tell which model has lower error. If the relationship is closer to linear than cubic, then the linear model will hace a lower RSS. If it is close to a cubic relationship, then the cubic model will have a lower RSS.
+
+## Problem 3
+
+## Exercise 9
+
+(a)
+```{r 9a}
+pairs(Auto)
+```
+
+(b)
+```{r 9b}
+cor(Auto[1:8])
+```
+
+(c)
+```{r 9c}
+fit=lm(mpg~.-name,data = Auto)
+summary(fit)
+```
+  i. There is a relationship between the predictors and the response because the p-value of the regression is extremely small
+  
+  ii.  Displacement, weight, year, and origin all have a statistically significant relationship with the response.
+  
+  iii. The average mpg for cars goes up by 0.75 every year.
+
+
+
+ 
+(d)
+```{r 9d}
+par(mfrow=c(2,2))
+plot(fit)
+```
+
+The fit of this model doesn't appear to be very accurate because there is a clear curve in the residuals plot. The residual plot also shows a few outliers but they aren't too unusually large.. The leverage plot shows that point 14 has a very high leverage, but it doesn't have a very high magnitude residual.
+
+```{r 9e}
+fit2 = lm(mpg~cylinders+displacement+horsepower+weight+acceleration+year+origin+weight*displacement+cylinders*displacement+weight*cylinders, data=Auto)
+summary(fit2)
+```
+
+I picked the three highest correlations from the correlation matrix as my interaction terms. As seen in the regression, the displacement and weight interaction term is the only one of the three that is statistically significant.
+
+(f)
+```{r 9f}
+fit3 = lm(mpg~cylinders+displacement+log(horsepower)+log(weight)+acceleration+year+origin, data=Auto)
+summary(fit3)
+plot(fit3)
+```
+
+I tested transformations on displacement, horsepower, weight, and acceleration. I found that log(displacement) and log(weight) improved the p-values of the regression and slightly lowered the curve of the residual plot.
+
+## Exercise 10
+
+(a)
+```{r 10a}
+fit = lm(Sales~Price+Urban+US, data=Carseats)
+summary(fit)
+```
+
+(b) Price: For each dollar increase in price, the average sales per location goes down by 54
+    Urban: The average sales per location is 22 less in urban stores vs rural stores.
+    US: The average number of sales per store goes up by 1200 if the store is in the US
+    
+(c) Sales = 13.043 + (-0.054)Price + (-.022)Urban + (1.201)US
+    
+    Urban and US are 1 if Yes, and 0 if No.
+
+(d) The null hypothesis can be rejected for Price and US because they ahve extremely low p-values.
+
+(e)
+```{r 10e}
+fit2 = lm(Sales~Price+US, data = Carseats)
+summary(fit2)
+```
+
+(f) The R^2 and p-values show that both regressions fit the data very well. The regression without the Urban predictor fits it slightly better
+
+(g)
+```{r 10g}
+confint(fit2)
+```
+
+(h)
+```{r}
+plot(fit2)
+```
+
+The residual plot doesn't show evidence of any extreme outliers. There a few points that have very high leverages as shown in the plot.
+
+## Exercise 13
+
+(a)
+```{r 13a}
+x <- rnorm(100, 0, 1)
+```
+
+(b)
+```{r 13b}
+eps <- rnorm(100, 0, 0.25)
+```
+
+(c)
+```{r 13c}
+y = -1 + 0.5*x + eps
+```
+The length of y is 100. $\beta_{0}$ is -1 and $\beta_{1}$ is 0.5
+
+(d)
+```{r 13d}
+plot(x,y)
+```
+
+x and y appear to have a linear relationship. There is some error in the relationship because of the epsilon term in the formula.
+
+(e)
+```{r 13e}
+fit = lm(y~x)
+summary(fit)
+```
+
+The coefficients of the model are very close to the model used to create vector y. It also has a very low p-value so it is a significant relationship.
+
+(f)
+```{r 13f}
+plot(x,y)
+abline(fit, lwd=3, col=1)
+abline(-1, 0.5, lwd=3, col=2)
+legend(-1, legend = c("model fit", "pop. regression"), col=2:3, lwd=3)
+```
+
+(g)
+```{r 13g}
+fit2 = lm(y~x+I(x^2))
+summary(fit2)
+```
+
+The addition of the quadratic term appears to have improved the fit of the model on this set because the R^2 is higher and the RSE dropped. However, the p-value of the quadratic term shows that there isn't a strong relationship.
+
+(h)
+```{r 13h}
+x <- rnorm(100, 0, 1)
+eps <- rnorm(100, 0, 0.1)
+y = -1 + 0.5*x + eps
+plot(x,y)
+fit3 = lm(y~x)
+summary(fit)
+plot(x,y)
+abline(fit, lwd=3, col=1)
+abline(-1, 0.5, lwd=3, col=2)
+legend(-1, legend = c("model fit", "pop. regression"), col=2:3, lwd=3)
+```
+
+The RSE dropped and the R^2 increased. This is expected because a lower variance in the error term lowers the error of the regression.
+
+(i)
+```{r 13i}
+x <- rnorm(100, 0, 1)
+eps <- rnorm(100, 0, 1)
+y = -1 + 0.5*x + eps
+plot(x,y)
+fit4 = lm(y~x)
+summary(fit)
+plot(x,y)
+abline(fit, lwd=3, col=1)
+abline(-1, 0.5, lwd=3, col=2)
+legend(-1, legend = c("model fit", "pop. regression"), col=2:3, lwd=3)
+```
+
+Increasing the variance of eps caused a large drop in R^2 and an increase in RSE. This is expected because an increase in variance in the error term will obviously cause more error in the regression.
+
+(j)
+```{r 13j}
+confint(fit)
+confint(fit3)
+confint(fit4)
+```
+
+The confidence intervals are larger when the data set gets noisier.
+
+## Exercise 14
+
+(a)
+```{r 14a}
+set.seed(1)
+x1=runif(100)
+x2=0.5*x1+rnorm(100)/10
+y=2+2*x1+0.3*x2+rnorm(100)
+```
+Y = 2 + 2$X_{1}$ + 0.3$X_{2}$ + $\epsilon$
+
+  $\beta_{0}$ = 2, $\beta_{1}$ = 2, $\beta_{2}$ = 0.3
+  
+(b)
+```{r}
+cor(x1,x2)
+plot(x1,x2)
+```
+
+(c)
+```{r 14c}
+fit = lm(y~x1+x2)
+summary(fit)
+```
+
+$\beta_{0}$ = 2.1305, $\beta_{1}$ = 1.4396, $\beta_{2}$ = 1.0097
+
+The coefficients are somewhat close to the original coefficients. The intercept is the closest out of all of them. The null hypothesis can rejected for $\beta_{1}$, but it can't be rejected for $\beta_{2}$.
+
+(d)
+```{r 14d}
+fit2 = lm(y~x1)
+summary(fit2)
+```
+
+The overall fit and RSE of the model doesn't change much. However, the coefficient for x1 is much close to the actual coefficient and the p-value for x1 is much lower. The null hypothesis can be rejected.
+
+(e)
+```{r 14e}
+fit3 = lm(y~x2)
+summary(fit3)
+```
+
+The coefficient for x2 is significant different from the original 0.3. The model has a lower R^2 and a higher RSE, but the p-value for x2 is very low. So, the null hypothesis can be rejected.
+
+(f)
+No. Because the predictors, x1 and x2, have collinearity, their effects on the response are not shown well when regressed together. So they must be done separately to show their true effect on the response.
+
+(g)
+```{r 14g}
+x1 = c(x1, 0.1)
+x2 = c(x2, 0.8)
+y = c(y,6)
+fit = lm(y~x1+x2)
+summary(fit)
+fit2 = lm(y~x1)
+summary(fit2)
+fit3 = lm(y~x2)
+summary(fit3)
+par(mfrow=c(2,2))
+plot(fit)
+par(mfrow=c(2,2))
+plot(fit2)
+par(mfrow=c(2,2))
+plot(fit3)
+```
+
+This bad observation has a significant effect on the models. The R^2 values drop and the RSE increases. The coefficients for the variables change significantly. In the first model, x2 becomes the significant predictor. In the individual models, the p-values are both still low and the nul hypotheses can still be rejected. This observation is an outlier in the model that contains only x1. This observation is a high-leverage point in the first and third models.
+
+
+## Problem 4
+
+(a)
+```{r 4a}
+test = rnorm(25)
+df.train = matrix(0, nrow=26,ncol=25)
+d=25
+for (i in 1:d){
+  col = c(paste0("X",i), rnorm(25))
+  df.train[,i] = col
+  assign(col[1], df.train[,1])
+}
+df.train[1,25] = "Y"
+colnames(df.train) <- df.train[1,]
+assign("Y", df.train[,25])
+df.train = df.train[-1,]
+df.train <- as.data.frame(df.train)
+for(i in 1:25)
+  df.train[,i] = as.numeric(df.train[,i])
+```
+
+(b)
+```{r}
+df.test = matrix(0, nrow=26,ncol=25)
+d=25
+for (i in 1:d){
+  col = c(paste0("X",i), rnorm(25))
+  df.test[,i] = col
+  assign(col[1], df.test[,1])
+}
+df.test[1,25] = "Y"
+assign("Y", df.test[,25])
+colnames(df.test) <- df.test[1,]
+df.test = df.test[-1,]
+df.test <- as.data.frame(df.test)
+for(i in 1:25)
+  df.test[,i] = as.numeric(df.test[,i])
+
+```
+
+(c)
+```{r}
+
+
+results <- NULL
+for(e in 1:24) {
+    reg_name <- paste0("reg_",e)
+    assign(reg_name, lm(as.formula(paste("Y","~",
+                     paste(colnames(df.train)[c(1:e)], collapse = "+"),
+                      sep = "")), data = df.train))
+    train_error <- mean(reg_1$residuals)^2
+    test_set <- df.test[,c(25,1:e)]
+    test_error <- mean((test_set$Y - predict.lm(eval(parse(text = reg_name)), test_set)) ^ 2)
+    output <- c(no_of_predictor= e,
+                MSE.train= train_error,
+                MSE.test= test_error)
+    results <- rbind(results,output)}
+results <- as.data.frame(results)
+
+
+```
+
+(d)
+```{r 4d}
+ggplot() +
+  geom_line(data = results, aes(x = no_of_predictor, y = MSE.train), color = "black") + 
+  geom_line(data = results, aes(x = no_of_predictor, y = MSE.test), color = "red") +
+  xlab('Number of predictors') + 
+  ylab('MSE')
+
+
+```
+
+(e) As the number of predictors increases, the training error stays the same but the test error increases.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

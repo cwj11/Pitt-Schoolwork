@@ -1,0 +1,208 @@
+---
+title: "R Notebook"
+author: "Connor Johnson"
+output: pdf_document
+---
+
+
+```{r setup}
+library(ISLR)
+library(ggplot2)
+library(dplyr)
+library(reshape2)
+library("writexl")
+write.csv(College, "College.csv")
+```
+
+## Problem 2
+
+## Exercise 1
+
+(a) A flexible model would be better in this case. Since n is large, we are able to better estimate a larger number of parameters which would be done using a more flexible model.
+
+(b) Since there is a large number of parameters, there will be more error in the model. With a small sample size, it is more difficult to accurately estimate all the parameters. A flexible model would likely be overfit causing more error in the test data. Because of this, an inflexible method would be better.
+
+(c) A flexible learning method is better in this case. Inflexible methods create more linear approximation of the relationship between the predictors and the response. Since this relatioship is nonlinear, a flexible method is better in approximating it.
+
+(d) An inflexible learning method would be better. Because of the high varaince in the error terms, a flexible method is likely to overfit to account for this error. The model would then be bad at predicting the test set. So, an inflexible method is better.
+
+## Exercise 2
+
+(a) This scenario is a regression problem because the response variable is quantitative. We are more interested in inferfence because we're just looking for a general understanding of what factors affect a CEO's salary. There is no intention to predict different CEO's salaries using the model that is created. Finally, n is 500 firms. p is 3; the three predictors are profit, number of employees, and the industry.
+
+(b) This scenario is a classification because the response variable is discrete; success or failure. We are more interested in prediction because the goal is to use the model to predict the outcome of another product. n is 20 products and p is 13; the predictors are price, marketing budget, competition price, and ten other variables not mentioned
+
+(c) This scenario is a regression problem because the response variable is quantitive, the percent change in the exchange rate. We are more interested in prediction because the goal is to use the model to project what the changes in the exchange rate will be based on the data. n is 52 weeks and p is 3; the predictors are percent change in the US market, the percent change in the British market, and the percent change in the German market.
+
+## Exercise 5
+
+A flexible model is more advantageous for when the relationship between the predictors and the response is non-linear. A less flexible approach toward this type of relationship would have more error. The flexible approach also reduces the error when using the model the make predictions. Inflexible approaches have more bias wwhich results in more error when using it on the test set.
+
+The main disadvantage of using a flexible approach is overfitting. If a too flexible approach is used the model will have very low error on the training data, but can have greater error when used to predict new data. This is because the model overfits small changes in the response variable that shouldn't be considered when predicting new data.
+
+Flexible approaches are much better for nonlinear models and for predivtion models. Since flexible models account more for small changes in data, they are much better at then predicting new data. Less flexible models are better for more linear relationships and inference. Since you're only looking for more broad understanding of the data, there is no need to use a flexible approach which could overfit the data.
+
+## Problem 3
+
+(a) For the CEO's salary, CEO's would have to be put into different groups based on their salary. They could be put into 4 quartiles based on the percentile of their salary. These would be 0-25th percentile, 25-50th percentile, 50-75th percentile, 75-100th percentile. The model would then make inferences about which factors affect the quartile a CEO is in which makes it a classification problem.
+
+(b) For the product response variable, it could be changed to the number of sales. The data recorded on the other products would be for the number of products sold so the model would then be predicting how many sales would occur for the new product.
+
+(c) For this problem, the response variable could just be changed to whether the exchange rate will go up or down. The data taken for the response would just be if the echange rate went up or down for that week. The model would then predict the probability that the exchange rate goes up or down based on the markets in each country.
+## Problem 4
+
+## Exercise 8
+(a)
+```{r 8a}
+college = read.csv("College.csv")
+```
+
+(b)
+```{r 8b}
+fix(college)
+rownames(college) = college[,1]
+fix(college)
+college = college[,-1]
+fix(college)
+
+```
+
+(c)
+```{r 8c i}
+summary(college)
+```
+
+```{r 8c ii}
+pairs(college[,2:10])
+```
+
+```{r 8c iii}
+plot(college$Private, college$Outstate)
+```
+
+```{r 8c iv}
+Elite=rep("No",nrow(college))
+Elite[college$Top10perc>50]="Yes"
+Elite=as.factor(Elite)
+college=data.frame(college ,Elite)
+summary(college)
+plot(college$Elite, college$Outstate)
+```
+
+```{r 8c v}
+par(mfrow=c(2,2))
+hist(college$F.Undergrad, breaks=4)
+hist(college$Accept)
+hist(college$Room.Board, breaks=50)
+hist(college$Grad.Rate)
+```
+
+```{r 8c vi}
+plot(college$Top10perc, college$Outstate)
+
+## This plot shows somewhat of a correlation between the percentage of students in the top of their class and tuition. This shows that schools with smarter students tend to be more expensive
+
+plot(college$Outstate, college$Grad.Rate)
+
+## This plot shows that schools with higher out of state tuition tend to have higher graduation rates
+
+plot(college$perc.alumni, college$Outstate)
+
+## This shows a correlation between how many alumni donate and the tuition cost. Schools with more  donations tend to have higher tuition.
+```
+
+## Exercise 9
+
+(a)
+Quantitative Predictors: mpg, cylinders, displacement, horsepower, weight, acceleration, year
+
+Qualitative Predictors: origin, name
+
+(b)
+```{r 9b}
+range(Auto$mpg)
+range(Auto$cylinders)
+range(Auto$displacement)
+range(Auto$horsepower)
+range(Auto$weight)
+range(Auto$acceleration)
+range(Auto$year)
+```
+
+(c)
+```{r 9c}
+sapply(Auto[,1:7], mean)
+sapply(Auto[,1:7], sd)
+```
+
+(d)
+```{r 9d}
+temp = Auto[-(10:85),]
+sapply(temp[,1:7], range)
+sapply(temp[,1:7], mean)
+sapply(temp[,1:7], sd)
+```
+
+(e)
+
+```{r 9e}
+par(mfrow=c(2,4))
+sapply(Auto[,1:7], boxplot)
+pairs(Auto)
+
+## The relatioships show that fuel efficiency improves with newer cars. Cars with more cylinders and horse power tend to be faster and also heavier. They also have worse fuel efficiency. Other than fuel efficiency, the year doesn't have much of a correlation with the predictors.
+```
+
+(e) The plots suggest that the year, weight, horsepower, and displacement all could be used to predict the mpg of a car. All these variables have a pretty strong correlation with mpg as shown in the scatter plots above. Since displacement, horsepower, and weight correlate with  each other, these variables should be selected carefully to avoid confounding variables.
+
+## Exercise 10
+
+(a) This dataset has 506 rows and 14 columns. The rows and columns represent data on housing values in Boston
+
+(b)
+```{r 10b}
+pairs(Boston)
+```
+Some of the relationships are nitrogen oxides concentraion and distance to employment centres, age and lower status of the population, and rooms and lower status of the population. The predictors that are most correlated with price are number of rooms and lower status of the population.
+
+(c) There aren't any strong linear correlations with the crime rate. However, the crime rate is only high when some predictors are equal to a certain value. For example, crime rate is only high in areas with no lots over 25,000 sq ft, accessibility to radial highways is high, higher property tax, and higher pupil teacher ratio. This likely due to the fact that crime is high in a certain area of Boston that has similar values for all of these predictors.
+
+(d)
+```{r 10d}
+g <- ggplot(Boston, aes(x=1:nrow(Boston), y=crim))
+g + geom_point()
+g <- ggplot(Boston, aes(x=1:nrow(Boston), y=tax))
+g + geom_point()
+g <- ggplot(Boston, aes(x=1:nrow(Boston), y=ptratio))
+g + geom_point()
+```
+Crim and tax both have very large ranges due to some high outliers. Ptratio doesn't appear to have any clear outliers. The outliers for tax and crime rates appear to be the same suburbs so these are likely correlated.
+
+(e)
+```{r 10e}
+table(Boston$chas)
+```
+There are 35 towns that bound the Charles river.
+
+```{r 10f}
+median(Boston$ptratio)
+```
+19.05 is the median pupil teacher ratio
+
+(g)
+```{r}
+(towns = Boston[Boston$medv == min(Boston$medv),])
+sapply(Boston, quantile)
+```
+There are 2 suburbs with the lowest median house value. The areas have above average crime rate, proportion of non-retatil businesses, nitrogen oxide levels, house ages, pupil-teacher ratio, accessibility to radial highways, property tax, and lower status of the population. They also are close to employment centres.
+
+(h)
+```{r}
+nrow(Boston[Boston$rm > 7,])  
+nrow(Boston[Boston$rm > 8,])
+rbind(sapply(Boston[Boston$rm > 8,], mean), sapply(Boston, median))
+```
+There are 64 suburbs that average more than 7 rooms and 13 suburbs that average more than 8 rooms per house. These suburbs have higher crime rates, lower pupil teacher ratios, and a lower lstat. These suburbs also have more expensive median home prices.
+
+
+

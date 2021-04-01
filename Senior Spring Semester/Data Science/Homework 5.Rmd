@@ -1,0 +1,390 @@
+---
+title: "R Notebook"
+author: "Connor Johnson"
+date: "03/19/21"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+
+
+```{r packages, include=FALSE}
+library(ISLR)
+library(dplyr)
+library(MASS)
+library(class)
+library(bootstrap)
+library(boot)
+library(broom)
+library(glmnet)
+library(coin)
+library(rcompanion)
+library(pls)
+library(leaps)
+```
+
+## Exercise 2
+
+### Problem 2
+
+(a)
+
+  iii. because lasso is less flexible than least squares by removing variables
+  
+(b)
+
+  iii. for the same reason as lasso
+
+(c)
+
+  ii. because non-linear methods are much more flexible than linear least squares
+
+### Problem 3
+
+(a)
+
+  iv. An increasing s will restrict the coefficients less making it more flexible, which causes a lower error on the training set
+  
+(b)
+
+  ii. The test RSS will decrease at first as the model becomes more flexible and accurate. As s continues to increase, the model will become overfit which cause the error to increase.
+  
+(c)
+
+  iii. The variance will continually increase because the model will become more flexible. Higher flexibility models have higher variances
+  
+(d)
+
+  iv. The bias will continually decrease because the model will become more flexible. Higher flexibility models have lower biases.
+  
+(e)
+
+  v. Remains constant because this error cannot be changed for any model with different parameters
+  
+### Problem 4
+
+(a)
+
+  iii. Increasing $\lambda$ makes the model less flexible. A less flexible model will have a lower error on the training set.
+  
+(b)
+
+  i. It will increase initially because the model becomes less flexible and more accurate at first. As $\lambda$ continutes to decrease, the model becomes underfit which increases the error on the test set.
+  
+(c)
+
+  iv. The variance steadily decreases because the model becomes less flexible as $\lambda$ increases.
+  
+(d)
+
+  iii. The bias steadily increases because the model becomes less flexible and bias is higher with more flexible models.
+  
+(e)
+
+  v. Remains constant because the irreducible error can't be changed by changing the model.
+
+## Exercise 3
+
+### Problem 9
+
+(a)
+```{r 9a}
+set.seed(9)
+idx = sample(1:777, 389)
+college_train = College[idx,]
+college_test = College[-idx,]
+```
+
+(b)
+```{r 9b}
+reg = lm(Apps~., data=college_train)
+pred = predict(reg, college_test)
+mean((pred-college_test[,"Apps"])^2)
+```
+
+
+(c)
+```{r 9c}
+train.mat = model.matrix(Apps~., data=college_train)
+test.mat = model.matrix(Apps~., data=college_test)
+lambda_seq = 10 ^ seq(4,-2, length=100)
+ridge = cv.glmnet(train.mat, college_train[,"Apps"], alpha=0, lambda = lambda_seq)
+lambda_best = ridge$lambda.min
+lambda_best
+ridge.pred = predict(ridge, newx=test.mat, s=lambda_best)
+mean((ridge.pred - college_test[,"Apps"])^2)
+
+
+```
+
+(d)
+```{r 9d}
+lambda_seq = 10 ^ seq(4,-2, length=100)
+ridge = cv.glmnet(train.mat, college_train[,"Apps"], alpha=1, lambda = lambda_seq)
+lambda_best = ridge$lambda.min
+lambda_best
+lasso.pred = predict(ridge, newx=test.mat, s=lambda_best)
+
+mean((lasso.pred - college_test[,"Apps"])^2)
+
+
+predict(ridge, s=lambda_best, type="coefficients")
+```
+
+
+
+(e)
+```{r 9e}
+pcr_model = pcr(Apps~., data=college_train, scale=TRUE, validation = "CV")
+validationplot(pcr_model, val.type="MSEP")
+pred = predict(pcr_model, college_test, ncomp=10)
+mean((pred - college_test[,"Apps"])^2)
+print("M = 10")
+```
+
+
+(f)
+```{r 9f}
+pls_model = plsr(Apps~., data=college_train, validation = "CV", scale=T)
+validationplot(pls_model, val.type="MSEP")
+
+pred = predict(pls_model, college_test, ncomp=11)
+mean((pred - college_test[,"Apps"])^2)
+print("M = 11")
+```
+
+(g) Most of the models performed reasonably well in predicting the number of college application. They all has very similar errors on the test set except for one model. The PCR model performed much more poorly on the test set compared to the four others.
+
+
+
+
+## Problem 10
+
+
+(a)
+```{r 10a}
+n = 1000
+p = 20
+x = matrix(rnorm(n*p), n, p)
+B = rnorm(p)
+idx = sample(1:p, 5)
+B[idx]=0
+epsilon = rnorm(n)
+y = x %*% B + epsilon
+```
+
+
+(b)
+```{r 10b}
+idx = sample(1:n, 100)
+y_train = y[idx]
+y_test = y[-idx]
+x_train = x[idx,]
+x_test = x[-idx,]
+
+```
+
+(c)
+```{r 10c}
+bestsub = regsubsets(y~., data = data.frame(x = x_train, y=y_train), nvmax = p)
+errors = rep(0, p)
+x_cols = colnames(x, do.NULL = FALSE, prefix = "x.")
+for (i in 1:p) {
+  coefi = coef(bestsub, id = i)
+  pred = as.matrix(x_train[, x_cols %in% names(coefi)]) %*% coefi[names(coefi) %in% 
+                                                                    x_cols]
+  errors[i] = mean((y_train - pred)^2)
+}
+plot(errors, ylab = "Training MSE", pch = 19, type = "b")
+```
+
+(d)
+```{r 10d}
+errors = rep(0, p)
+x_cols = colnames(x, do.NULL = FALSE, prefix = "x.")
+for (i in 1:p) {
+  coefi = coef(bestsub, id = i)
+  pred = as.matrix(x_test[, x_cols %in% names(coefi)]) %*% coefi[names(coefi) %in% 
+                                                                    x_cols]
+  errors[i] = mean((y_test - pred)^2)
+}
+plot(errors, ylab = "Training MSE", pch = 19, type = "b")
+```
+
+
+
+
+
+
+
+
+
+
+## Exercise 4
+
+```{r 4a}
+set.seed(7)
+X = matrix(rnorm(1000), nrow=100,ncol=10)
+colnames(X) <- c("X1", "X2", "X3", "X4", "X5", "X6", "X7", "X8", "X9", "X10")
+B = c(1,1,1,1,1,0,0,0,0,0)
+epsilon = rnorm(100)
+Y = X %*% B + epsilon
+
+```
+
+
+```{r 4b}
+X_large = matrix(rnorm(100000), nrow=10000,ncol=10)
+colnames(X_large) <- c("X1", "X2", "X3", "X4", "X5", "X6", "X7", "X8", "X9", "X10")
+B = c(1,1,1,1,1,0,0,0,0,0)
+epsilon_large = rnorm(10000)
+Y_large = X_large %*% B + epsilon_large
+```
+
+
+
+```{r 4c}
+lasso = cv.glmnet(X, Y, alpha=1, lambda = lambda_seq)
+lambda_best = lasso$lambda.min
+lasso.pred = predict(lasso, newx=X_large, s=lambda_best)
+
+mean((lasso.pred - Y_large)^2)
+
+err.lasso_1 = mean((lasso.pred - Y_large)^2)
+lasso_coef = predict(lasso, s=lambda_best, type="coefficients")
+lasso_coef
+```
+
+
+
+```{r 4d}
+X_d = data.frame(X[,c(-6,-9)])
+fit.lm = lm(Y~., data=X_d)
+summary(fit.lm)
+X_large_d = data.frame(X_large)
+
+OLS.pred = predict(fit.lm, X_large_d)
+err.OLS_1 = mean((OLS.pred - Y_large)^2)
+err.OLS_1
+```
+
+
+
+
+```{r 4e}
+p = 10
+err.lasso = numeric(p)
+err.OLS = numeric(p)
+set.seed(7)
+B = c(1,1,1,1,1,0,0,0,0,0)
+sigma=1
+
+for (i in 1:p){
+  X = matrix(rnorm(1000), nrow=100,ncol=10)
+  colnames(X) <- c("X1", "X2", "X3", "X4", "X5", "X6", "X7", "X8", "X9", "X10")
+  
+  epsilon = rnorm(100, 0, sigma)
+  Y = X %*% B + epsilon
+  
+  
+  
+  lasso = cv.glmnet(X, Y, alpha=1, lambda = lambda_seq)
+  lambda_best = lasso$lambda.min
+  lasso.pred = predict(lasso, newx=X_large, s=lambda_best)
+
+  err.lasso[i] = mean((lasso.pred - Y_large)^2)
+  lasso_coef = predict(lasso, s=lambda_best, type="coefficients")
+  
+  for (a in 2:11){
+    if(lasso_coef[,1][a] == 0){
+      X = X[,-(a-1)]
+    }
+  }
+  X = data.frame(X)
+  fit.lm = lm(Y~., data=X)
+
+  OLS.pred = predict(fit.lm, X_large_d)
+  err.OLS[i] = mean((OLS.pred - Y_large)^2)
+}
+
+mean(err.OLS)
+mean(err.lasso)
+```
+
+
+
+
+```{r 4f, cache=T}
+
+p = 1000
+err.lasso = numeric(p)
+err.OLS = numeric(p)
+set.seed(7)
+B = c(1,1,1,1,1,0,0,0,0,0)
+sigma= 2^seq(-2,10, length=13)
+
+err.lasso_sig = numeric(length(sigma))
+err.OLS_sig = numeric(length(sigma))
+
+for (num in 1:length(sigma)){
+  for (i in 1:p){
+    X = matrix(rnorm(1000), nrow=100,ncol=10)
+    colnames(X) <- c("X1", "X2", "X3", "X4", "X5", "X6", "X7", "X8", "X9", "X10")
+  
+    epsilon = rnorm(100, 0, sigma[num])
+    Y = X %*% B + epsilon
+  
+  
+  
+    lasso = cv.glmnet(X, Y, alpha=1, lambda = lambda_seq)
+    lambda_best = lasso$lambda.min
+    lasso.pred = predict(lasso, newx=X_large, s=lambda_best)
+
+    err.lasso[i] = mean((lasso.pred - Y_large)^2)
+    lasso_coef = predict(lasso, s=lambda_best, type="coefficients")
+  
+    for (a in 2:11){
+      if(lasso_coef[,1][a] == 0){
+        X = X[,-(a-1)]
+      }
+    }
+    X = data.frame(X)
+    fit.lm = lm(Y~., data=X)
+
+    OLS.pred = predict(fit.lm, X_large_d)
+    err.OLS[i] = mean((OLS.pred - Y_large)^2)
+  }
+  err.lasso_sig[num] = mean(err.lasso)
+  err.OLS_sig[num] = mean(err.OLS)
+}
+plot(sigma, err.lasso_sig, log="xy", main="Error Lasso")
+plot(sigma, err.OLS_sig, log="xy", main = "Error OLS-after-lasso")
+```
+
+(f)
+We can see from the graphs that at low SNRs, the procedures with high degrees of freedom do poorly. When the SNR is lower, they perform very well. This is because it is harder for a model to predict the signal when there is lot of noise covering it. This is especially true in models with high degrees of freedom becuase they are more likely to overfit.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
