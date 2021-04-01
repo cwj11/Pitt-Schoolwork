@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Create_Loan">
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="132dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/loanMsg"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:text="How much would you like to loan:\t\t$"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/daysMsg"
+        app:layout_constraintEnd_toStartOf="@+id/dollars"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+
+    <EditText
+        android:id="@+id/dollars"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintBaseline_toBaselineOf="@+id/loanMsg"
+        app:layout_constraintEnd_toStartOf="@+id/dec" />
+
+    <TextView
+        android:id="@+id/dec"
+        android:layout_width="6dp"
+        android:layout_height="wrap_content"
+        android:text="."
+        android:textSize="20dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/dollars"
+        app:layout_constraintEnd_toStartOf="@id/cents" />
+
+    <EditText
+        android:id="@+id/cents"
+        android:layout_width="30dp"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:inputType="number"
+        android:maxLength="2"
+        app:layout_constraintBaseline_toBaselineOf="@+id/dec"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/loanMsg" />
+
+
+    <TextView
+        android:id="@+id/daysMsg"
+        android:layout_width="230dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:text="How many days until payback:"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/userEdit"
+        app:layout_constraintEnd_toStartOf="@id/daysEdit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loanMsg" />
+
+    <EditText
+        android:id="@+id/daysEdit"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintBaseline_toBaselineOf="@+id/daysMsg"
+        app:layout_constraintStart_toEndOf="@id/daysMsg" />
+
+    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/radioGroup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="11dp"
+        android:layout_marginRight="11dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/userEdit"
+        app:layout_constraintEnd_toStartOf="@+id/userEdit"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <RadioButton
+            android:id="@+id/allUsers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:onClick="onRadioButtonClicked"
+            android:text="All Users"
+            app:layout_constraintBaseline_toBaselineOf="@+id/userRadio"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <RadioButton
+            android:id="@+id/userRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="1dp"
+            android:onClick="onRadioButtonClicked"
+            android:text="User: "
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/allUsers" />
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/userEdit"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="20dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/msgEdit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.3"
+        app:layout_constraintStart_toEndOf="@id/radioGroup"
+        app:layout_constraintTop_toBottomOf="@+id/daysMsg" />
+
+    <EditText
+        android:id="@+id/msgEdit"
+        android:layout_width="379dp"
+        android:layout_height="187dp"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        app:layout_constraintBottom_toTopOf="@+id/submitLoan"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userEdit" />
+
+    <Button
+        android:id="@+id/submitLoan"
+        android:layout_width="88dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="55dp"
+        android:layout_marginBottom="56dp"
+        android:onClick="createLoan"
+        android:text="CREATE"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/msgEdit" />
+</android.support.constraint.ConstraintLayout>

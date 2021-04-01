@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "265471184071",
+    "firebase_url": "https://loanabuddy-44100.firebaseio.com",
+    "project_id": "loanabuddy-44100",
+    "storage_bucket": "loanabuddy-44100.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:265471184071:android:d4abeb1a57db8d05",
+        "android_client_info": {
+          "package_name": "com.example.loanabuddy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "265471184071-001aqsdrbu4fbkdor5cdbnu4sg5ma5je.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtMeCgJ_mJBlEMkV6wtAxKVIovhryVbps"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
