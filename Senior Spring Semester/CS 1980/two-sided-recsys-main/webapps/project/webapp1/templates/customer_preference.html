@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+ label
+ {
+     display: inline-block;
+     width: 200px;
+ }
+</style>
+<div id="input_boxes">
+    <form method="POST" action="/customer_preference">
+        <label for="genre">Movie Genre </label>
+        <input id="genre" type="text" placeholder="comedy" name="genre"><br><br>
+        <label for="length">Movie Length (Minutes) </label>
+        <input id="length" type="number" step = "1" placeholder="120" name="length"><br><br>
+        <label for="year">Release Year </label>
+        <input id="year" type="number" placeholder="2017" name="year"><br><br>
+
+        <button class="button"> Submit </button>
+
+    </form>
+</div>
+{% endblock %}

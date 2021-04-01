@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block header %}
+  {% block title %} Webapp 2 {% endblock %}
+{% endblock %}
+
+{% block content %}
+<style>
+ label
+ {
+     display: inline-block;
+     width: 200px;
+ }
+
+ h1{
+   font-size: 40px;
+   text-align: center;
+ }
+
+ h2{
+   font-size: 20px;
+   text-align: center;
+ }
+
+ table{
+  outline: 1.5px solid black;
+  margin: 0 auto;
+  text-align: center;
+}
+th, td {
+  text-align: center;
+  align: center;
+}
+</style>
+<div>
+    <h1> Webapp 2 </h1> <br>
+    <h2>One a scale of 1-5 (worst-best), please rate each following coupon recommendations</h2> <br> <br>
+    <div>
+      <br>
+      {% for row in data %}
+      <table style="width:30%; text-align:center">
+      
+
+      <tr>
+        <th colspan="4" style = "text-align: center"> <h2>Recommendation {{ row[0] }}</h2></th>
+        <tr>
+          <th colspan="4" style = "text-align: center">Customer Info:</th>
+        </tr>
+        <tr>
+          <td colspan="4" style = "text-align: center">Name: {{ row[9] }}</td>
+        </tr>
+        <tr>
+          <td colspan="4" style = "text-align: center">Age: {{ row[6] }}</td>
+        </tr>
+        <tr>
+          <td colspan="4" style = "text-align: center">Gender: {{ row[7] }}</td>
+        </tr>
+        <tr> 
+          <td colspan="4" style = "text-align: center">Occupation: {{ row[8] }}</td>
+        </tr>
+        <tr>
+          <th colspan="4" style = "text-align: center">Coupon Offered:</th>
+        </tr>
+        <tr>
+          <td colspan="4" style = "text-align: center">{{ row[2] }}</td>
+        </tr>
+
+        <tr>
+          <th colspan="4" style = "text-align: center">Your Current Rating:</th>
+        </tr>
+        <tr>
+          <td colspan="4" style = "text-align: center">{{ row[5] }}</td>
+        </tr></tr>
+      </tr>
+      </table>
+      {% endfor %}
+      <br>
+      <br>
+      
+      <form method="POST" action="">
+
+      <label for="recommendation_id">Enter Recommendation ID:</label><br>
+      <input id="recommendation_id" type="number" placeholder="" name="recommendation_id"><br>
+
+      <label for="change_rating">Enter New Rating:</label><br>
+      <input id="change_rating" type="number" placeholder="" name="change_rating"><br><br>
+
+      <button class="button"> Submit </button>
+
+      </form>
+
+    </div>
+</div>
+{% endblock %}

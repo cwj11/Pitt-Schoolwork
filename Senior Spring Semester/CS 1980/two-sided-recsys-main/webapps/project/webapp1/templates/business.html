@@ -1,0 +1,15 @@
+<!doctype html>
+{% extends "base.html" %}
+{% block content%}
+<div id="business_buttons">
+    <form>
+    	<a href="{{ url_for('main.business_info') }}" class="button">
+            Set Preferences
+        </a>
+        <a href="{{ url_for('auth.business_movies') }}" class="button">
+            Add Movie
+        </a>
+        
+    </form>
+</div>
+{%endblock %}

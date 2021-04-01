@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!--https://stackoverflow.com/a/10868669-->
+<style>
+ label
+ {
+     display: inline-block;
+     width: 200px;
+ }
+</style>
+<div id="input_boxes">
+    <form method="POST" action="/business_info">
+        <label for="ageMin">Minimum Age </label>
+        <input id="ageMin" type="number" placeholder="18" name="ageMin"><br><br>
+        <label for="ageMax">Maximum Age </label>
+        <input id="ageMax" type="number" placeholder="25" name="ageMax"><br><br>
+        <label for="gender">Gender </label>
+        <input id="gender" type="text" placeholder="male,female,nonbinary,etc." name="gender"><br><br>
+        <label for="occupation">Occupation </label>
+        <input id="occupation" type="text" placeholder="Accountant" name="occupation"><br><br>
+        <button class="button"> Submit </button>
+    </form>
+</div>
+{% endblock %}

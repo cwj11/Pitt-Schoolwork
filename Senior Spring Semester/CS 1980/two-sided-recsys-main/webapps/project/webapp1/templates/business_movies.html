@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+ label
+ {
+     display: inline-block;
+     width: 200px;
+ }
+</style>
+<div id="input_boxes">
+    <form method="POST" action="/business_movies">
+        <label for="name">Movie Name </label>
+        <input id="name" type="text" placeholder="Step Brothers" name="name"><br><br>
+        <label for="genre">Movie Genre </label>
+        <input id="genre" type="text" placeholder="comedy" name="genre"><br><br>
+        <label for="length">Movie Length (Minutes) </label>
+        <input id="length" type="number" step = "1" placeholder="106" name="length"><br><br>
+        <label for="year">Release Year </label>
+        <input id="year" type="number" placeholder="2008" name="year"><br><br>
+
+        <button class="button"> Submit </button>
+
+    </form>
+</div>
+{% endblock %}

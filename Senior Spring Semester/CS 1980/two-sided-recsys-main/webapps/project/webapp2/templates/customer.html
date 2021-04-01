@@ -1,0 +1,20 @@
+<!doctype html>
+{% extends "base.html" %}
+
+{% block content %}
+<div id="customer_buttons">
+    <form>
+    	<a href="{{ url_for('main.customer_info') }}" class="button">
+            Profile Setup
+        </a>
+        <a href="{{ url_for('auth.customer_preference') }}" class="button">
+            Add Movie Preferences
+        </a>
+        <a href="{{ url_for('auth.customer_recommendation') }}" class="button">
+            Recommendations
+        </a>
+
+
+    </form>
+</div>
+{% endblock %}
