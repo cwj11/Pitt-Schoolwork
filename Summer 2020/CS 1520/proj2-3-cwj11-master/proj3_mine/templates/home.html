@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block main %}
+	<h2>{{ self.title() }}</h2>
+	{% if g.userType == "visitor" %}
+		<p>Welcome to our library! We have a bunch of books. You can borrow em. That's what a library is.
+
+		<p>Below is a listing of our collection. If you'd like to borrow some books, please log in, or sign up if you don't have an account.
+	{% elif g.userType == "patron" %}
+		<p>Welcome back, {{ g.user.username }}!
+		<p>You can check out or return a book by clicking the button to the left of each book.
+	{% else %}
+		<p>Hello, librarian. <em>Hello.</em>
+	{% endif %}
+
+	<table class="booklisting">
+		<thead>
+			<tr>
+			{% if g.userType == "librarian" %}
+				<th class="centered">Borrowers
+			{% endif %}
+			<th>Title
+			<th>Author
+
+		</thead>
+
+		<tbody>
+		{% for book in books %}
+			<tr>
+			{% if g.userType == "librarian" %}
+				<td class="centered">{{ book.borrowed_by.all() | length }}
+			{% endif %}
+
+			<td>
+
+			{% if g.userType == "patron" %}
+				{% set borrowed = book in g.user.borrows %}
+				{% set caption = "Return" if borrowed else "Borrow" %}
+				{% set class = "return" if borrowed else "borrow" %}
+
+				<form method="post">
+				    <button type="submit" class="{{ class }}" name="book_id" value="{{ book.book_id }}">{{ caption }}</button>
+				</form>
+			{% endif %}
+
+			{% if g.userType == "librarian" %}
+				<a href="{{ url_for('books', book_id=book.book_id) }}">{{ book.title }}</a>
+			{% else %}
+				<cite>{{ book.title }}</cite>
+			{% endif %}
+
+			<td>{{ book.author }}
+
+		{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

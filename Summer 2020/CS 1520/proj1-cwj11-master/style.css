@@ -1,0 +1,112 @@
+h1 {
+	color: #FFFFFF;
+	text-align: center;
+	font-size: 300%;
+	text-shadow: 2px 2px #4B0082, 4px 4px #0000FF, 6px 6px #00FF00, 8Px 8px #FFFF00, 10px 10px #ff7f00, 12px 12px #ff0000;
+	font-family: Impact, Charcoal, sans-serif;
+}
+
+H2 {
+	text-align: center;
+	font-family: "Arial Black", Gadget, sans-serif;
+}
+
+html {
+	background-color: gray;
+}
+
+html, body {
+	margin: 0;
+	height: 100%;
+	min-height: 100%;
+}
+
+body {
+	display: flex;
+	margin: 0 auto;
+	flex-direction: column;
+	max-width: 70%;
+	
+}
+
+header {
+	background-color: #003594;
+	height: 15%;
+	flex: none
+	
+}
+
+main {
+	background-color: #FFFF99;
+	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
+	flex: auto;
+}
+
+footer {
+	text-align:center;
+	background-color: #003594;
+	height: 15%;
+	flex:none;
+}
+
+.flex-container{
+	display: flex;
+	flex-flow: row nowrap;
+	min-height: 100%
+}
+
+#left, #middle{
+	border-right: 2px solid black
+}
+
+#left, #middle, #right{
+	width: 33.333%;
+	border-right: 2px solid black
+}
+
+#make_thing{
+	display:block;
+	margin: 0 auto;
+	font-size: 150%;
+	border-radius: 0.25em;
+	padding: 0.5em;
+}
+
+p {
+	padding: 1em;
+	text-align: left;
+	font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+a {
+	margin-left: 5px;
+	display: inline-block;
+}
+
+h3 {
+	margin-left: 10px;
+}
+
+ul {
+	font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+#no_click {
+	font-size: 250%;
+	border-radius: 0.5em;
+	padding: 0.5em;
+	font-weight: bold;
+	margin-top: 0.5em;
+}
+
+img.floating{
+	float: right;
+	margin-right: 2em;
+	max-width: 10em;
+}
+
+
+
+
+

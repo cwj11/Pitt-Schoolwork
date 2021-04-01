@@ -1,0 +1,188 @@
+/************************************************************
+  Basic rules
+*************************************************************/
+
+* {
+	box-sizing: border-box;
+}
+
+.centered {
+	text-align: center !important;
+}
+
+html {
+	background: #ECB69B;
+	font-family: 'Segoe UI', sans-serif;
+	font-size: 125%;
+}
+
+body {
+	background: white;
+	width: 900px;
+	margin: 0 auto;
+	padding: 0.7em 1em;
+}
+
+h1 {
+	margin-top: 0;
+}
+
+h2 {
+	margin-top: 0.5em;
+}
+
+a {
+	color: #63370F;
+	font-weight: bold;
+}
+
+a:hover {
+	color: #935B26;
+}
+
+dt {
+	font-weight: bold;
+}
+
+header {
+	background: #FAD0BB;
+	padding: 0.25em 0.5em;
+}
+
+footer {
+	padding: 1.5em 1em 0.5em 1em;
+	margin-top: 2em;
+	color: #333;
+	background-color: #ccc;
+	text-align: right;
+	font-style: italic;
+	font-size: 75%;
+}
+
+ul.flashes {
+	list-style: none;
+	padding-left: 0;
+	margin-bottom: 0.25em;
+}
+
+ul.flashes li {
+	border: 2px solid #998C31;
+	background: #F5EA96;
+	border-radius: 0.7em;
+	text-align: center;
+	font-weight: bold;
+	font-size: 110%;
+	padding: 0.5em;
+}
+
+div.error {
+	border: 2px solid #993131;
+	background: #F59696;
+	border-radius: 0.7em;
+	text-align: center;
+	font-weight: bold;
+	font-size: 110%;
+	padding: 0.5em;
+}
+
+/*************************************************************
+  Nav bar
+*************************************************************/
+
+nav > ul {
+	list-style-type: none;
+	padding-left: 0;
+	display: flex;
+	flex-flow: row nowrap;
+}
+
+nav > ul > li {
+	padding: 0 0.5em;
+}
+
+/* The A ~ B selector means "select any B that comes after an A. In this case,
+it selects all list items *except the first* inside the navbar's list. */
+nav > ul > li ~ li {
+	border-left: 1px solid #444;
+}
+
+/*************************************************************
+  Inputs
+*************************************************************/
+
+input, button {
+	/* "inherit" means "whatever the enclosing element's font size is."
+	Actually most (all?) CSS properties can be "inherit"! */
+	font-size: inherit;
+	border-radius: 0.3em;
+}
+
+button {
+	border-top:    2px solid #CCC;
+	border-left:   2px solid #CCC;
+	border-bottom: 2px solid #777;
+	border-right:  2px solid #777;
+	cursor: pointer;
+}
+
+button:active {
+	border-top:    2px solid #777;
+	border-left:   2px solid #777;
+	border-bottom: 2px solid #CCC;
+	border-right:  2px solid #CCC;
+}
+
+/* This is an attribute selector. Very useful for styling inputs. */
+input[type="text"], input[type="password"] {
+	/*border-radius: 5px;*/
+}
+
+/*************************************************************
+  Book listing table
+*************************************************************/
+
+table.booklisting {
+	border-collapse: collapse;
+	width: 100%;
+	margin: 0 auto;
+}
+
+table.booklisting thead {
+	border-bottom: 2px solid black;
+	background-color: #EC7133;
+	font-size: 110%;
+}
+
+table.booklisting td, table.booklisting th {
+	text-align: left;
+	padding: 0.4em 0.6em;
+}
+
+table.booklisting tbody tr {
+	background-color: #eee;
+	transition: 0.2s all ease;
+}
+
+table.booklisting tbody tr:nth-child(even) {
+	background-color: #ccc;
+}
+
+table.booklisting tbody tr:hover {
+	background-color: white;
+}
+
+table.booklisting form {
+	display: inline;
+	margin-right: 0.7em;
+}
+
+table.booklisting button {
+	width: 5.5em;
+	padding: 0.2em;
+	font-weight: bold;
+}
+
+table.booklisting button.return       { background-color: #F88; }
+table.booklisting button.return:hover { background-color: #FAA; }
+table.booklisting button.borrow       { background-color: #8F8; }
+table.booklisting button.borrow:hover { background-color: #AFA; }

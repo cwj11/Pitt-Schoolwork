@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block main %}
+	{# neat! you can actually "call" other blocks like methods... since they are. #}
+	<h2>{{ self.title() }}</h2>
+
+	{# this is the basic test we're using to see if someone is logged in.
+		you'll have to extend this logic further... #}
+	{% if g.user %}
+		<p>Wow, you're logged in!
+	{% else %}
+		<p>Not logged in.
+	{% endif %}
+
+	<p>Now, if only someone implemented a book listing here...
+{% endblock %}

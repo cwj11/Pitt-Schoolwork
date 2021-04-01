@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Book Details{% endblock %}
+
+{% block main %}
+	<h2>{{ self.title() }}</h2>
+
+	{% if error %}
+		<div class="error"><strong>Error:</strong> {{ error }}</div>
+	{% endif %}
+
+	<dl>
+		<dt>Title:
+		<dd>{{ book.title }}
+		<dt>Author:
+		<dd>{{ book.author }}
+		<dt>Borrowed by:
+		<dd>{{ borrowers | length }} Patron(s)
+			<ul>
+			{% for u in borrowers %}
+				<li>{{ u.username }} ({{ u.email }})
+			{% endfor %}
+			</ul>
+	</dl>
+
+	{% if borrowers | length == 0 %}
+		<form action="" method="post">
+			<button type="submit" name="book_id" value="{{ book.book_id }}">Delete Book</button>
+		</form>
+	{% endif %}
+{% endblock %}
