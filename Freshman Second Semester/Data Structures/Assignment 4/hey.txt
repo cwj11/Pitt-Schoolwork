@@ -1,0 +1,135 @@
+Algorithm: Simple Quick Sort
+Array Size: 1000
+Order: Reverse
+Number of trials: 10
+Average Time: 0.004174729
+Average number of comparisons: 500998.0
+Average number of data moves: 3996.0
+
+
+Algorithm: Simple Quick Sort
+Array Size: 1000
+Order: Random
+Number of trials: 10
+Average Time: 2.119839E-4
+Average number of comparisons: 12068.7
+Average number of data moves: 7772.8
+
+
+Algorithm: Simple Quick Sort
+Array Size: 1000
+Order: Sorted
+Number of trials: 10
+Average Time: 0.0017708473
+Average number of comparisons: 501498.0
+Average number of data moves: 3996.0
+
+
+Algorithm: Quick Sort Base Case 5
+Array Size: 1000
+Order: Reverse
+Number of trials: 10
+Average Time: 1.8412310000000002E-4
+Average number of comparisons: 2998.0
+Average number of data moves: 3008.0
+
+
+Algorithm: Quick Sort Base Case 5
+Array Size: 1000
+Order: Random
+Number of trials: 10
+Average Time: 0.0022335797
+Average number of comparisons: 64330.8
+Average number of data moves: 63925.7
+
+
+Algorithm: Quick Sort Base Case 5
+Array Size: 1000
+Order: Sorted
+Number of trials: 10
+Average Time: 5.00331E-5
+Average number of comparisons: 1503.0
+Average number of data moves: 1005.0
+
+
+Algorithm: Quick Sort Base Case 20
+Array Size: 1000
+Order: Reverse
+Number of trials: 10
+Average Time: 1.077605E-4
+Average number of comparisons: 2998.0
+Average number of data moves: 3008.0
+
+
+Algorithm: Quick Sort Base Case 20
+Array Size: 1000
+Order: Random
+Number of trials: 10
+Average Time: 2.740146E-4
+Average number of comparisons: 83978.6
+Average number of data moves: 83685.9
+
+
+Algorithm: TextMergeQuick Sort Base Case 20
+Array Size: 1000
+Order: Sorted
+Number of trials: 10
+Average Time: 3.36226E-5
+Average number of comparisons: 1503.0
+Average number of data moves: 1005.0
+
+
+Algorithm: Quick Sort Base Case 100
+Array Size: 1000
+Order: Reverse
+Number of trials: 10
+Average Time: 5.93687E-5
+Average number of comparisons: 2998.0
+Average number of data moves: 3008.0
+
+
+Algorithm: Quick Sort Base Case 100
+Array Size: 1000
+Order: Random
+Number of trials: 10
+Average Time: 1.8605570000000002E-4
+Average number of comparisons: 65352.9
+Average number of data moves: 64960.8
+
+
+Algorithm: Quick Sort Base Case 100
+Array Size: 1000
+Order: Sorted
+Number of trials: 10
+Average Time: 4.09526E-5
+Average number of comparisons: 1503.0
+Average number of data moves: 1005.0
+
+
+Algorithm: Random Quick Sort
+Array Size: 1000
+Order: Reverse
+Number of trials: 10
+Average Time: 3.7477340000000004E-4
+Average number of comparisons: 13706.9
+Average number of data moves: 5750.7
+
+
+Algorithm: Random Quick Sort
+Array Size: 1000
+Order: Random
+Number of trials: 10
+Average Time: 1.690254E-4
+Average number of comparisons: 15372.7
+Average number of data moves: 9070.5
+
+
+Algorithm: Random Quick Sort
+Array Size: 1000
+Order: Sorted
+Number of trials: 10
+Average Time: 1.3186570000000002E-4
+Average number of comparisons: 12973.5
+Average number of data moves: 4683.8
+
+
